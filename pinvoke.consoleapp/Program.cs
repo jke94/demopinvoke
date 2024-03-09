@@ -7,16 +7,16 @@
 
     #endregion
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ConfigPerson
+    {
+        public int id;
+        public int age;
+        public IntPtr name; // IntPtr para el puntero char*
+    }
+
     class LibraryPath
     {
-        [StructLayout(LayoutKind.Sequential)]
-        public struct ConfigPerson
-        {
-            public int id;
-            public int age;
-            public IntPtr name; // IntPtr para el puntero char*
-        }
-
         #if DEBUG
             [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
         #else
@@ -54,7 +54,7 @@
         {
             IntPtr person = LibraryPath.createPerson();
 
-            LibraryPath.ConfigPerson config_person = new LibraryPath.ConfigPerson
+            ConfigPerson config_person = new ConfigPerson
             {
                 id = 19941994,
                 age = 30,
@@ -66,7 +66,7 @@
 
             IntPtr show_person_info = LibraryPath.getPersonInfo(person);
 
-            LibraryPath.ConfigPerson person_info = Marshal.PtrToStructure<LibraryPath.ConfigPerson>(show_person_info);
+            ConfigPerson person_info = Marshal.PtrToStructure<ConfigPerson>(show_person_info);
 
             // Imprime la información de la persona
             Console.WriteLine($"ID: {person_info.id}");
