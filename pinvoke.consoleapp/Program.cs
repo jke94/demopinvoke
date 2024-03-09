@@ -3,10 +3,11 @@
     #region using
 
     using System.Runtime.InteropServices;
+    using System.IO;
 
     #endregion
 
-    class Program
+    class LibraryPath
     {
         [StructLayout(LayoutKind.Sequential)]
         public struct ConfigPerson
@@ -16,23 +17,44 @@
             public IntPtr name; // IntPtr para el puntero char*
         }
 
-        [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+        #if DEBUG
+            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+        #else
+            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll")]
+        #endif
         public static extern IntPtr createPerson();
 
-        [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+        #if DEBUG
+            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+        #else
+                [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll")]
+        #endif
         public static extern void configPerson(IntPtr person, ref ConfigPerson config_person);
 
-        [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+        #if DEBUG
+            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+        #else
+            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll")]
+                
+        #endif
         public static extern IntPtr getPersonInfo(IntPtr person);
 
+        #if DEBUG
         [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+        #else
+            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll")]
+        #endif
         public static extern void destroyPerson(IntPtr person);
+    }
 
+
+    class Program
+    {
         static void Main()
         {
-            IntPtr person = createPerson();
+            IntPtr person = LibraryPath.createPerson();
 
-            ConfigPerson config_person = new ConfigPerson
+            LibraryPath.ConfigPerson config_person = new LibraryPath.ConfigPerson
             {
                 id = 19941994,
                 age = 30,
@@ -40,11 +62,11 @@
                 name = Marshal.StringToHGlobalAnsi("Javi") 
             };
 
-            configPerson(person, ref config_person);
+            LibraryPath.configPerson(person, ref config_person);
 
-            IntPtr show_person_info = getPersonInfo(person);
+            IntPtr show_person_info = LibraryPath.getPersonInfo(person);
 
-            ConfigPerson person_info = Marshal.PtrToStructure<ConfigPerson>(show_person_info);
+            LibraryPath.ConfigPerson person_info = Marshal.PtrToStructure<LibraryPath.ConfigPerson>(show_person_info);
 
             // Imprime la información de la persona
             Console.WriteLine($"ID: {person_info.id}");
@@ -53,7 +75,7 @@
 
             // Libera la memoria asignada
             Marshal.FreeHGlobal(config_person.name);
-            destroyPerson(person);
+            LibraryPath.destroyPerson(person);
         }
     }
 }
