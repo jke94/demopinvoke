@@ -1,24 +1,37 @@
-#pragma once
+#ifndef API_H
+#define API_H
 
-#ifdef DLLPROJECT_EXPORTS
+#include <string>
+#include <memory>
+
+#ifdef _WIN32
 #   define EXPORT __declspec(dllexport)
 #else
 #   define EXPORT __declspec(dllimport)
 #endif
 
-class Dummy
-{
-public:
-    int dummy_function(int a);
-};
-
-struct Person
+struct ConfigPerson
 {
     int id;
     int age;
+    char* name;
 };
 
-extern "C" EXPORT Dummy* createHoge();
-extern "C" EXPORT void freeHoge(Dummy * instance);
-extern "C" EXPORT int getResult(Dummy * instance, int a);
-extern "C" EXPORT void createPerson(Dummy * instance, Person * person);
+class IPerson 
+{
+    public:
+        virtual ~IPerson() {}
+        virtual void setId(int id) = 0;
+        virtual void setAge(int age) = 0;
+        virtual void setName(char* name) = 0;
+        virtual int getId() = 0;
+        virtual int getAge() = 0;
+        virtual char* getName() = 0;
+};
+
+EXPORT IPerson* createPerson();
+EXPORT void configPerson(IPerson* person, ConfigPerson* config_person);
+EXPORT ConfigPerson* getPersonInfo(IPerson* person);
+EXPORT void destroyPerson(IPerson* person);
+
+#endif

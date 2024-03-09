@@ -8,43 +8,52 @@
 
     class Program
     {
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct Person
+        [StructLayout(LayoutKind.Sequential)]
+        public struct ConfigPerson
         {
-            [MarshalAs(UnmanagedType.I4)]
             public int id;
-            [MarshalAs(UnmanagedType.I4)]
             public int age;
-        };
+            public IntPtr name; // IntPtr para el puntero char*
+        }
 
         [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
-        private static extern IntPtr createHoge();
+        public static extern IntPtr createPerson();
 
         [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
-        private static extern void freeHoge(IntPtr instance);
+        public static extern void configPerson(IntPtr person, ref ConfigPerson config_person);
 
         [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
-        private static extern int getResult(IntPtr instance, int a);
+        public static extern IntPtr getPersonInfo(IntPtr person);
 
         [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
-        private static extern void createPerson(IntPtr instance, ref Person person);
+        public static extern void destroyPerson(IntPtr person);
 
-        public static void Main()
+        static void Main()
         {
-            IntPtr dummy_a = createHoge(); 
-            Console.WriteLine(dummy_a); // => Show the pointer address.
-            int result = getResult(dummy_a, 10);
-            Console.WriteLine(result); // => 15
-            freeHoge(dummy_a);
+            IntPtr person = createPerson();
 
-            Console.WriteLine("-----");
-            IntPtr dummy_b = createHoge();
-            Person person = new();
-            createPerson(dummy_b, ref person);
-            freeHoge(dummy_b);
+            ConfigPerson config_person = new ConfigPerson
+            {
+                id = 19941994,
+                age = 30,
+                // Convertir la cadena a un puntero a caracteres
+                name = Marshal.StringToHGlobalAnsi("Javi") 
+            };
 
-            Console.WriteLine(person.id);
-            Console.WriteLine(person.age);
+            configPerson(person, ref config_person);
+
+            IntPtr show_person_info = getPersonInfo(person);
+
+            ConfigPerson person_info = Marshal.PtrToStructure<ConfigPerson>(show_person_info);
+
+            // Imprime la información de la persona
+            Console.WriteLine($"ID: {person_info.id}");
+            Console.WriteLine($"Age: {person_info.age}");
+            Console.WriteLine($"Name: {Marshal.PtrToStringAnsi(person_info.name)}");
+
+            // Libera la memoria asignada
+            Marshal.FreeHGlobal(config_person.name);
+            destroyPerson(person);
         }
     }
 }

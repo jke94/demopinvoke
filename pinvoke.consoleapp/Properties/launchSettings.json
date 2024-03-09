@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "pinvoke.consoleapp": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

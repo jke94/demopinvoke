@@ -1,0 +1,5 @@
+EXPORTS
+	createPerson
+	configPerson
+	getPersonInfo
+	destroyPerson

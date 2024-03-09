@@ -1,27 +1,29 @@
-#pragma once
-
+#include "Person.h"
 #include "API.h"
-#include <iostream>
-
-Dummy* createHoge()
+#pragma warning(disable : 4996)
+IPerson* createPerson()
 {
-    return new Dummy();
+    return new Person();
 }
 
-void freeHoge(Dummy* instance)
+void configPerson(IPerson* person, ConfigPerson* config_person)
 {
-    std::cout << "Deleteing Hoge: " << instance << std::endl;
+    person->setId(config_person->id);
+    person->setAge(config_person->age);
+    person->setName(config_person->name);
+}
+ConfigPerson* getPersonInfo(IPerson* person) 
+{
+    ConfigPerson* config_person = new ConfigPerson();
 
-    delete instance;
+    config_person->id = person->getId();
+    config_person->age = person->getAge();
+    config_person->name = person->getName();
+
+    return config_person;
 }
 
-int getResult(Dummy* instance, int a)
+void destroyPerson(IPerson* person) 
 {
-    return instance->dummy_function(a);
-}
-
-void createPerson(Dummy* instance, Person* person)
-{
-    static_cast<Person*>(person)->id = 1994;
-    static_cast<Person*>(person)->age = 15;
+    delete person;
 }
