@@ -3,7 +3,6 @@
     #region using
 
     using System.Runtime.InteropServices;
-    using System.IO;
 
     #endregion
 
@@ -17,65 +16,85 @@
 
     class LibraryPath
     {
+        /**
+         *  UPDATE!!!! Before to run, update with absolute paths:
+         *      
+         *      - Example: 
+         *          NativeLibrayDebugAbsPath:       "C:\\Users\\the_name_of_user\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll"
+         *          NativeLibrayReleaseAbsPath:     "C:\\Users\\the_name_of_user\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll"
+         */
+
+        public const string NativeLibrayDebugAbsPath = "C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll";
+        public const string NativeLibrayReleaseAbsPath = "C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll";
+        
         #if DEBUG
-            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+            [DllImport(NativeLibrayDebugAbsPath)]
         #else
-            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll")]
+            [DllImport(NativeLibrayReleaseAbsPath)]
         #endif
         public static extern IntPtr createPerson();
 
         #if DEBUG
-            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+            [DllImport(NativeLibrayDebugAbsPath)]
         #else
-                [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll")]
+            [DllImport(NativeLibrayReleaseAbsPath)]
         #endif
         public static extern void configPerson(IntPtr person, ref ConfigPerson config_person);
 
         #if DEBUG
-            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+            [DllImport(NativeLibrayDebugAbsPath)]
         #else
-            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll")]
-                
+            [DllImport(NativeLibrayReleaseAbsPath)]
         #endif
         public static extern IntPtr getPersonInfo(IntPtr person);
 
         #if DEBUG
-        [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll")]
+            [DllImport(NativeLibrayDebugAbsPath)]
         #else
-            [DllImport("C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll")]
+            [DllImport(NativeLibrayReleaseAbsPath)]
         #endif
         public static extern void destroyPerson(IntPtr person);
     }
-
 
     class Program
     {
         static void Main()
         {
-            IntPtr person = LibraryPath.createPerson();
-
-            ConfigPerson config_person = new ConfigPerson
+            try
             {
-                id = 19941994,
-                age = 30,
-                // Convertir la cadena a un puntero a caracteres
-                name = Marshal.StringToHGlobalAnsi("Javi") 
-            };
+                IntPtr person = LibraryPath.createPerson();
 
-            LibraryPath.configPerson(person, ref config_person);
+                ConfigPerson config_person = new ConfigPerson
+                {
+                    id = 19941994,
+                    age = 29,
+                    // Convertir la cadena a un puntero a caracteres
+                    name = Marshal.StringToHGlobalAnsi("Javi")
+                };
 
-            IntPtr show_person_info = LibraryPath.getPersonInfo(person);
+                LibraryPath.configPerson(person, ref config_person);
 
-            ConfigPerson person_info = Marshal.PtrToStructure<ConfigPerson>(show_person_info);
+                IntPtr show_person_info = LibraryPath.getPersonInfo(person);
 
-            // Imprime la información de la persona
-            Console.WriteLine($"ID: {person_info.id}");
-            Console.WriteLine($"Age: {person_info.age}");
-            Console.WriteLine($"Name: {Marshal.PtrToStringAnsi(person_info.name)}");
+                ConfigPerson person_info = Marshal.PtrToStructure<ConfigPerson>(show_person_info);
 
-            // Libera la memoria asignada
-            Marshal.FreeHGlobal(config_person.name);
-            LibraryPath.destroyPerson(person);
+                // Imprime la información de la persona
+                Console.WriteLine($"ID: {person_info.id}");
+                Console.WriteLine($"Age: {person_info.age}");
+                Console.WriteLine($"Name: {Marshal.PtrToStringAnsi(person_info.name)}");
+
+                // Libera la memoria asignada
+                Marshal.FreeHGlobal(config_person.name);
+                LibraryPath.destroyPerson(person);
+            }
+            catch (DllNotFoundException e)
+            {
+                Console.WriteLine($"uuuuuups!: {e}");
+            }
+            catch( Exception e)
+            {
+                Console.WriteLine($"Exception: {e}");
+            }
         }
     }
 }
