@@ -3,68 +3,42 @@
     #region using
 
     using System.Runtime.InteropServices;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using pinvoke.consoleapp.Native;
 
     #endregion
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ConfigPerson
+    public class StructsBox
     {
-        public int id;
-        public int age;
-        public IntPtr name; // IntPtr para el puntero char*
-    }
-
-    class LibraryPath
-    {
-        /**
-         *  UPDATE!!!! Before to run, update with absolute paths:
-         *      
-         *      - Example: 
-         *          NativeLibrayDebugAbsPath:       "C:\\Users\\the_name_of_user\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll"
-         *          NativeLibrayReleaseAbsPath:     "C:\\Users\\the_name_of_user\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll"
-         */
-
-        public const string NativeLibrayDebugAbsPath = "C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Debug\\pinvoke.library.managed.dll";
-        public const string NativeLibrayReleaseAbsPath = "C:\\Users\\javie\\Downloads\\demopinvoke\\x64\\Release\\pinvoke.library.managed.dll";
-        
-        #if DEBUG
-            [DllImport(NativeLibrayDebugAbsPath)]
-        #else
-            [DllImport(NativeLibrayReleaseAbsPath)]
-        #endif
-        public static extern IntPtr createPerson();
-
-        #if DEBUG
-            [DllImport(NativeLibrayDebugAbsPath)]
-        #else
-            [DllImport(NativeLibrayReleaseAbsPath)]
-        #endif
-        public static extern void configPerson(IntPtr person, ref ConfigPerson config_person);
-
-        #if DEBUG
-            [DllImport(NativeLibrayDebugAbsPath)]
-        #else
-            [DllImport(NativeLibrayReleaseAbsPath)]
-        #endif
-        public static extern IntPtr getPersonInfo(IntPtr person);
-
-        #if DEBUG
-            [DllImport(NativeLibrayDebugAbsPath)]
-        #else
-            [DllImport(NativeLibrayReleaseAbsPath)]
-        #endif
-        public static extern void destroyPerson(IntPtr person);
-    }
-
-    class Program
-    {
-        static void Main()
+        [StructLayout(LayoutKind.Sequential)]
+        public struct ConfigPerson
         {
+            public int id;
+            public int age;
+            public IntPtr name; // IntPtr para el puntero char*
+        }
+    }
+
+    public class Program
+    {
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddSingleton<INativeWrapper, NativeWrapper>();
+            });
+
+        static void Main(string[] args)
+        {
+            var host = CreateHostBuilder(args).Build();
+            var native_wrapper = host.Services.GetRequiredService<INativeWrapper>();
+
             try
             {
-                IntPtr person = LibraryPath.createPerson();
+                IntPtr person = native_wrapper.create_person();
 
-                ConfigPerson config_person = new ConfigPerson
+                StructsBox.ConfigPerson config_person = new StructsBox.ConfigPerson
                 {
                     id = 19941994,
                     age = 29,
@@ -72,11 +46,11 @@
                     name = Marshal.StringToHGlobalAnsi("Javi")
                 };
 
-                LibraryPath.configPerson(person, ref config_person);
+                native_wrapper.config_person(person, ref config_person);
 
-                IntPtr show_person_info = LibraryPath.getPersonInfo(person);
+                IntPtr show_person_info = native_wrapper.get_person_info(person);
 
-                ConfigPerson person_info = Marshal.PtrToStructure<ConfigPerson>(show_person_info);
+                StructsBox.ConfigPerson person_info = Marshal.PtrToStructure<StructsBox.ConfigPerson>(show_person_info);
 
                 // Imprime la información de la persona
                 Console.WriteLine($"ID: {person_info.id}");
@@ -85,7 +59,7 @@
 
                 // Libera la memoria asignada
                 Marshal.FreeHGlobal(config_person.name);
-                LibraryPath.destroyPerson(person);
+                native_wrapper.get_person_info(person);
             }
             catch (DllNotFoundException e)
             {
