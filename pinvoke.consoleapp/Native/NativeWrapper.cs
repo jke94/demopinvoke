@@ -15,13 +15,13 @@
 
         private readonly IntPtr _native_library;
 
-        private readonly CreatePerson _create_person;
+        private readonly CreatePerson? _create_person;
 
-        private readonly ConfigPerson _config_person;
+        private readonly ConfigPerson? _config_person;
 
-        private readonly GetPersonInfo _get_person_info;
+        private readonly GetPersonInfo? _get_person_info;
 
-        private readonly DestroyPerson _destroy_person;
+        private readonly DestroyPerson? _destroy_person;
 
         #endregion
 
@@ -29,7 +29,7 @@
 
         private delegate IntPtr CreatePerson();
 
-        private delegate IntPtr ConfigPerson(IntPtr person, ref StructsBox.ConfigPerson config_person);
+        private delegate IntPtr ConfigPerson(IntPtr person, ref StructBox.ConfigPerson config_person);
 
         private delegate IntPtr GetPersonInfo(IntPtr person);
 
@@ -46,9 +46,15 @@
             try
             {
                 _native_library = NativeLibrary.Load(
-                    LibraryPath.NativeLibrayDebugAbsPath,
-                    typeof(NativeWrapper).Assembly,
-                    DllImportSearchPath.AssemblyDirectory);
+                    "pinvoke.library.managed",
+                    typeof(NativeWrapper).Assembly, 
+                    DllImportSearchPath.AssemblyDirectory
+                    );
+
+                _create_person = GetDelegateForNativeFunction<CreatePerson>("createPerson");
+                _config_person = GetDelegateForNativeFunction<ConfigPerson>("configPerson");
+                _get_person_info = GetDelegateForNativeFunction<GetPersonInfo>("getPersonInfo");
+                _destroy_person = GetDelegateForNativeFunction<DestroyPerson>("destroyPerson");
             }
             catch (DllNotFoundException e)
             {
@@ -58,11 +64,6 @@
             {
                 _logger.LogError(e.Message);
             }
-
-            _create_person = GetDelegateForNativeFunction<CreatePerson>("createPerson");
-            _config_person = GetDelegateForNativeFunction<ConfigPerson>("configPerson");
-            _get_person_info = GetDelegateForNativeFunction<GetPersonInfo>("getPersonInfo");
-            _destroy_person = GetDelegateForNativeFunction<DestroyPerson>("destroyPerson");
         }
 
         #endregion
@@ -74,7 +75,7 @@
             return _create_person();
         }
 
-        public void config_person(IntPtr person, ref StructsBox.ConfigPerson config_person)
+        public void config_person(IntPtr person, ref StructBox.ConfigPerson config_person)
         {
             _config_person(person, ref config_person);
         }
