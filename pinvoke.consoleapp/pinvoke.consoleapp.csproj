@@ -11,6 +11,10 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\pinvoke.library.managed\pinvoke.library.managed.vcxproj" />
+  </ItemGroup>
+
   <Target Name="CopyFiles" AfterTargets="AfterBuild">
     <Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.dll" DestinationFolder="$(OutDir)" />
     <Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.pdb" DestinationFolder="$(OutDir)" />

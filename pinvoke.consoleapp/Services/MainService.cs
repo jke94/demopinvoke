@@ -58,7 +58,8 @@
 
                 // Libera la memoria asignada
                 Marshal.FreeHGlobal(config_person.name);
-                _nativeWrapper.get_person_info(person);
+
+                _nativeWrapper.destroy_person(person);
             }
             catch (DllNotFoundException e)
             {

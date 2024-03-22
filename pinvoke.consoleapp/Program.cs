@@ -11,6 +11,8 @@
 
     public class Program
     {
+        #region Methods
+
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
@@ -19,12 +21,18 @@
                 services.AddTransient<IMainService, MainService>();
             });
 
-        static void Main(string[] args)
+        #endregion
+
+        #region Main method
+
+        public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
             var main_service = host.Services.GetRequiredService<IMainService>();
 
-            main_service.Run();           
+            main_service.Run();
         }
+
+        #endregion
     }
 }

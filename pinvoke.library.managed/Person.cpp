@@ -1,14 +1,14 @@
-#include <iostream>
 #include "Person.h"
 #include <iostream>
 
 Person::Person()
 {
+    std::cout << "[NATIVE] Called constructor over " << this << "." << std::endl;
 }
 
 Person::~Person()
 {
-
+    std::cout << "[NATIVE] Called destructor over " << this << "." << std::endl;
 }
 
 void Person::setId(int id)

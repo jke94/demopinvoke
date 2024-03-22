@@ -13,15 +13,15 @@
 
         private ILogger<NativeWrapper> _logger;
 
-        private readonly IntPtr _native_library;
+        private readonly IntPtr _native_library = default!;
 
-        private readonly CreatePerson? _create_person;
+        private readonly CreatePerson _create_person = default!;
 
-        private readonly ConfigPerson? _config_person;
+        private readonly ConfigPerson _config_person = default!;
 
-        private readonly GetPersonInfo? _get_person_info;
+        private readonly GetPersonInfo _get_person_info = default!;
 
-        private readonly DestroyPerson? _destroy_person;
+        private readonly DestroyPerson _destroy_person = default!;
 
         #endregion
 
