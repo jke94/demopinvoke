@@ -1,5 +1,6 @@
 ﻿namespace pinvoke.consoleapp.Native
 {
+    using System.Reflection.Metadata;
     #region using
 
     using System.Runtime.InteropServices;
@@ -7,13 +8,15 @@
 
     #endregion
 
-    class NativeWrapper : INativeWrapper
+    class NativeWrapper : INativeWrapper, IDisposable
     {
         #region Fields
 
         private ILogger<NativeWrapper> _logger;
 
         private readonly IntPtr _native_library = default!;
+
+        private bool _disposed;
 
         private readonly CreatePerson _create_person = default!;
 
@@ -92,6 +95,25 @@
 
         #endregion
 
+        #region Dispose Methods
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+                NativeLibrary.Free(_native_library);
+            }
+        }
+
+        #endregion
+
         #region Templates
 
         private T GetDelegateForNativeFunction<T>(string functionName)
@@ -106,7 +128,6 @@
 
             return Marshal.GetDelegateForFunctionPointer<T>(function_pointer);
         }
-
         #endregion
     }
 }
