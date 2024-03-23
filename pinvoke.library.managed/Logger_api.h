@@ -16,8 +16,16 @@
 void init_logger(void(*native_logger_callback)(const char* msg));
 void end_logger();
 
+void log_debug_def(const char* file, const char* function, const int line, const std::string& msg);
+#define WRITE_DEBUG(msg) log_info_def(__FILENAME__, __FUNCTION__, __LINE__ , msg)
+
 void log_info_def(const char* file, const char* function, const int line, const std::string& msg);
 #define WRITE_INFO(msg) log_info_def(__FILENAME__, __FUNCTION__, __LINE__ , msg)
 
+void log_warning_def(const char* file, const char* function, const int line, const std::string& msg);
+#define WRITE_WARNING(msg) log_info_def(__FILENAME__, __FUNCTION__, __LINE__ , msg)
+
+void log_error_def(const char* file, const char* function, const int line, const std::string& msg);
+#define WRITE_ERROR(msg) log_info_def(__FILENAME__, __FUNCTION__, __LINE__ , msg)
 
 #endif
