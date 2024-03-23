@@ -1,8 +1,36 @@
-#include "Person.h"
+#include <memory>
+
 #include "API.h"
+#include "Logger.h"
+#include "Person.h"
+
 #pragma warning(disable : 4996)
+
+ILogger* logger_ = nullptr;
+
+void log_message(const char* str)
+{
+    logger_->log_message(str);
+}
+
+void setUpLogCallback(void(*log_callback)(const char* str))
+{
+    logger_ = new Logger(log_callback);
+
+    log_message("Initalize native logger.");
+}
+
+void disposeLogCallback()
+{
+    log_message("Dispose native logger.");
+    
+    delete logger_;
+}
+
 IPerson* createPerson()
 {
+    log_message("Creating person...");
+
     return new Person();
 }
 
