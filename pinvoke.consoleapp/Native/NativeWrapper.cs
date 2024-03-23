@@ -18,8 +18,6 @@
 
         private bool _disposed;
 
-        private readonly LogCallback _log_callback = default!;
-
         private readonly SetUpLogCallback _setUpLogCallback = default!;
 
         private readonly DisposeLogCallback _disposeLogcallback = default!;
@@ -70,14 +68,14 @@
                 _setUpLogCallback = GetDelegateForNativeFunction<SetUpLogCallback>("setUpLogCallback");
                 _disposeLogcallback = GetDelegateForNativeFunction<DisposeLogCallback>("disposeLogCallback");
 
+                // Operations over objects.
                 _create_person = GetDelegateForNativeFunction<CreatePerson>("createPerson");
                 _config_person = GetDelegateForNativeFunction<ConfigPerson>("configPerson");
                 _get_person_info = GetDelegateForNativeFunction<GetPersonInfo>("getPersonInfo");
                 _destroy_person = GetDelegateForNativeFunction<DestroyPerson>("destroyPerson");
 
                 // SetUp native logger.
-                _log_callback = log_function;
-                _setUpLogCallback(_log_callback);
+                _setUpLogCallback(log_function);
             }
             catch (DllNotFoundException e)
             {

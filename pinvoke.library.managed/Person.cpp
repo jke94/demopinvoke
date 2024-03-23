@@ -1,14 +1,23 @@
-#include "Person.h"
 #include <iostream>
+#include <sstream>
+#include "Person.h"
 
 Person::Person()
 {
-    std::cout << "[NATIVE] Called constructor over " << this << "." << std::endl;
+    std::stringstream ss;
+    ss << "Called constructor, object: " << this;
+    std::string msg = ss.str();
+
+    WRITE_INFO(msg);
 }
 
 Person::~Person()
 {
-    std::cout << "[NATIVE] Called destructor over " << this << "." << std::endl;
+    std::stringstream ss;
+    ss << "Called destructor, object: " << this;
+    std::string msg = ss.str();
+
+    WRITE_INFO(msg);
 }
 
 void Person::setId(int id)

@@ -2,6 +2,7 @@
 #define PERSON_H
 
 #include "API.h"
+#include "Logger_api.h"
 
 class Person : public IPerson
 {

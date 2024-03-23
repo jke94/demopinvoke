@@ -148,13 +148,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="API.h" />
+    <ClInclude Include="ILogger.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="Logger_api.h" />
     <ClInclude Include="Person.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Logger_api.cpp" />
     <ClCompile Include="Person.cpp" />
   </ItemGroup>
   <ItemGroup>
