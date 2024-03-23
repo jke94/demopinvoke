@@ -1,11 +1,13 @@
 # demopinvoke
 
 ## A. Summary
+
 Demo about how p/invoke works.
 
 - ✅ Console client app (managed code - C#) consuming native code (C++).
 - ✅ Lifecycle (create, edit and destroy) of native object and send it for the native manage code.
 - ✅ Managed code editing values for native object.
+- ✅🚀 Log based on C++ callback: communication between C++ and C#.
 
 ## B. Documentation
 
