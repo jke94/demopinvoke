@@ -31,6 +31,8 @@
             var main_service = host.Services.GetRequiredService<IMainService>();
 
             main_service.Run();
+
+            host.Dispose();
         }
 
         #endregion
