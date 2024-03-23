@@ -15,6 +15,7 @@ void end_logger()
 
 void log_debug_def(const char* file, const char* function, const int line, const std::string& msg)
 {
+	logger->log_debug_message(file, function, line, msg.c_str());
 }
 
 void log_info_def(const char* file, const char* function, const int line, const std::string& msg)
@@ -24,8 +25,10 @@ void log_info_def(const char* file, const char* function, const int line, const 
 
 void log_warning_def(const char* file, const char* function, const int line, const std::string& msg)
 {
+	logger->log_warning_message(file, function, line, msg.c_str());
 }
 
 void log_error_def(const char* file, const char* function, const int line, const std::string& msg)
 {
+	logger->log_error_message(file, function, line, msg.c_str());
 }
