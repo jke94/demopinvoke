@@ -1,8 +1,29 @@
-#include "Person.h"
+#include <memory>
+
 #include "API.h"
+#include "Logger_api.h"
+#include "Person.h"
+
 #pragma warning(disable : 4996)
+
+void setUpLogCallback(void(*log_callback)(const char* str))
+{
+    init_logger(log_callback);
+
+    WRITE_INFO("Initalize native logger.");
+}
+
+void disposeLogCallback()
+{
+    WRITE_INFO("Dispose native logger.");
+
+    end_logger();
+}
+
 IPerson* createPerson()
 {
+    WRITE_INFO("Creating person...");
+
     return new Person();
 }
 

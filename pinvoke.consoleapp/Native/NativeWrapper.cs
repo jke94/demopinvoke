@@ -18,6 +18,10 @@
 
         private bool _disposed;
 
+        private readonly SetUpLogCallback _setUpLogCallback = default!;
+
+        private readonly DisposeLogCallback _disposeLogcallback = default!;
+
         private readonly CreatePerson _create_person = default!;
 
         private readonly ConfigPerson _config_person = default!;
@@ -29,6 +33,12 @@
         #endregion
 
         #region Delegates
+
+        private delegate void LogCallback(IntPtr message);
+
+        private delegate void SetUpLogCallback([MarshalAs(UnmanagedType.FunctionPtr)] LogCallback logCallback);
+
+        private delegate void DisposeLogCallback();
 
         private delegate IntPtr CreatePerson();
 
@@ -54,10 +64,18 @@
                     DllImportSearchPath.AssemblyDirectory
                     );
 
+                // Native logging
+                _setUpLogCallback = GetDelegateForNativeFunction<SetUpLogCallback>("setUpLogCallback");
+                _disposeLogcallback = GetDelegateForNativeFunction<DisposeLogCallback>("disposeLogCallback");
+
+                // Operations over objects.
                 _create_person = GetDelegateForNativeFunction<CreatePerson>("createPerson");
                 _config_person = GetDelegateForNativeFunction<ConfigPerson>("configPerson");
                 _get_person_info = GetDelegateForNativeFunction<GetPersonInfo>("getPersonInfo");
                 _destroy_person = GetDelegateForNativeFunction<DestroyPerson>("destroyPerson");
+
+                // SetUp native logger.
+                _setUpLogCallback(log_function);
             }
             catch (DllNotFoundException e)
             {
@@ -72,6 +90,11 @@
         #endregion
 
         #region Methods
+
+        public void log_function(IntPtr message)
+        {
+            _logger.LogInformation($"[NATIVE_CODE] {Marshal.PtrToStringAnsi(message)}");
+        }
 
         public IntPtr create_person()
         {
@@ -99,6 +122,9 @@
 
         public void Dispose()
         {
+            // Disose native logger.
+            _disposeLogcallback();
+
             Dispose(true);
             GC.SuppressFinalize(this);
         }

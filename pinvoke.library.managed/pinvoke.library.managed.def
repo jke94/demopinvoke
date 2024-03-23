@@ -1,4 +1,6 @@
 EXPORTS
+	setUpLogCallback
+	disposeLogCallback
 	createPerson
 	configPerson
 	getPersonInfo

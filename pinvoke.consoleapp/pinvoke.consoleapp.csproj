@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <Target Name="CopyFiles" AfterTargets="AfterBuild">
-    <Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.dll" DestinationFolder="$(OutDir)" />
-    <Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.pdb" DestinationFolder="$(OutDir)" />
+    <Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.dll" DestinationFolder="$(OutDir)"/>
+    <Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.pdb" DestinationFolder="$(OutDir)"/>
     
     <Copy Condition="'$(Configuration)' == 'Release'" SourceFiles="$(SolutionDir)\x64\Release\pinvoke.library.managed.dll" DestinationFolder="$(OutDir)" />
   </Target>
