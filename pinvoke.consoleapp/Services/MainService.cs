@@ -35,7 +35,7 @@
         {
             try
             {
-                IntPtr person = _nativeWrapper.create_person();
+                IntPtr native_person = _nativeWrapper.create_person();
 
                 StructBox.ConfigPerson config_person = new StructBox.ConfigPerson
                 {
@@ -45,25 +45,25 @@
                     name = Marshal.StringToHGlobalAnsi("Javi")
                 };
 
-                _nativeWrapper.config_person(person, ref config_person);
+                _nativeWrapper.config_person(native_person, ref config_person);
 
-                IntPtr show_person_info = _nativeWrapper.get_person_info(person);
+                IntPtr show_person_info = _nativeWrapper.get_person_info(native_person);
 
-                StructBox.ConfigPerson person_info = Marshal.PtrToStructure<StructBox.ConfigPerson>(show_person_info);
+                var person = show_person_info.ToStructConfigPerson();
 
                 // Imprime la información de la persona
-                _logger.LogInformation($"ID: {person_info.id}");
-                _logger.LogInformation($"Age: {person_info.age}");
-                _logger.LogInformation($"Name: {Marshal.PtrToStringAnsi(person_info.name)}");
+                _logger.LogInformation($"ID: {person.Id}");
+                _logger.LogInformation($"Age: {person.Age}");
+                _logger.LogInformation($"Name: {person.Name}");
 
                 // Libera la memoria asignada
                 Marshal.FreeHGlobal(config_person.name);
 
-                _nativeWrapper.destroy_person(person);
+                _nativeWrapper.destroy_person(native_person);
             }
             catch (DllNotFoundException e)
             {
-                _logger.LogError($"uuuuuups!: {e}");
+                _logger.LogError($"Uuuuuups (DllNotFoundException)!: {e}");
             }
             catch (Exception e)
             {
