@@ -27,21 +27,22 @@ IPerson* createPerson()
     return new Person();
 }
 
-void configPerson(IPerson* person, ConfigPerson* config_person)
+void setPersonInfo(IPerson* person, PersonInfo* person_info)
 {
-    person->setId(config_person->id);
-    person->setAge(config_person->age);
-    person->setName(config_person->name);
+    person->setId(person_info->id);
+    person->setAge(person_info->age);
+    person->setName(person_info->name);
 }
-ConfigPerson* getPersonInfo(IPerson* person) 
+void getPersonInfo(IPerson* person, PersonInfo* person_info)
 {
-    ConfigPerson* config_person = new ConfigPerson();
+    person_info->id = person->getId();
+    person_info->age = person->getAge();
+    person_info->name = person->getName();
+}
 
-    config_person->id = person->getId();
-    config_person->age = person->getAge();
-    config_person->name = person->getName();
-
-    return config_person;
+void setPersonMonitor(IPerson* person, PERSON_MONITOR_CALLBACK person_monitor_callback)
+{
+    person->setPersonMonitorCallback(person_monitor_callback);
 }
 
 void destroyPerson(IPerson* person) 

@@ -2,6 +2,7 @@ EXPORTS
 	setUpLogCallback
 	disposeLogCallback
 	createPerson
-	configPerson
+	setPersonInfo
+	setPersonMonitor
 	getPersonInfo
 	destroyPerson

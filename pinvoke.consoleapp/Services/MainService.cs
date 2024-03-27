@@ -14,6 +14,9 @@
 
         private ILogger<MainService> _logger;
         private INativeWrapper _nativeWrapper;
+        private int _wait_time_in_milliseconds = 5000;
+
+        private NativeDelegates.PersonMonitorCallback personMonitorCallback = default!;
 
         #endregion
 
@@ -31,13 +34,22 @@
 
         #region Methods
 
+        public void simple_test(IntPtr name, int ppm)
+        {
+            _logger.LogInformation($"Name: {Marshal.PtrToStringAnsi(name)}, PPM: {ppm}");
+        }
+
         public void Run()
         {
             try
             {
+                personMonitorCallback = simple_test;
+
                 IntPtr native_person = _nativeWrapper.create_person();
 
-                StructBox.ConfigPerson config_person = new StructBox.ConfigPerson
+                _nativeWrapper.setPersonMonitor(native_person, personMonitorCallback);
+
+                var person_info = new StructBox.PersonInfo
                 {
                     id = 19941994,
                     age = 29,
@@ -45,11 +57,17 @@
                     name = Marshal.StringToHGlobalAnsi("Javi")
                 };
 
-                _nativeWrapper.config_person(native_person, ref config_person);
+                _nativeWrapper.config_person(native_person, ref person_info);
 
-                IntPtr show_person_info = _nativeWrapper.get_person_info(native_person);
+                _logger.LogInformation($"Waiting {_wait_time_in_milliseconds} ms to display events.");
 
-                var person = show_person_info.ToStructConfigPerson();
+                Thread.Sleep(_wait_time_in_milliseconds);
+
+                StructBox.PersonInfo person_info_returned = new();
+
+                _nativeWrapper.get_person_info(native_person, ref person_info);
+
+                var person = person_info.ToPerson();
 
                 // Imprime la información de la persona
                 _logger.LogInformation($"ID: {person.Id}");
@@ -57,7 +75,7 @@
                 _logger.LogInformation($"Name: {person.Name}");
 
                 // Libera la memoria asignada
-                Marshal.FreeHGlobal(config_person.name);
+                Marshal.FreeHGlobal(person_info_returned.name);
 
                 _nativeWrapper.destroy_person(native_person);
             }

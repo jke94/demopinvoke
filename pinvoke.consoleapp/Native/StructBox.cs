@@ -10,7 +10,7 @@
     {
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct ConfigPerson
+        public struct PersonInfo
         {
             public int id;
             public int age;

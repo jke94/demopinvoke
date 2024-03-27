@@ -1,6 +1,5 @@
 ﻿namespace pinvoke.consoleapp.Native
 {
-    using System.Reflection.Metadata;
     #region using
 
     using System.Runtime.InteropServices;
@@ -24,7 +23,9 @@
 
         private readonly CreatePerson _create_person = default!;
 
-        private readonly ConfigPerson _config_person = default!;
+        private readonly SetPersonMonitor _set_person_monitor = default!;
+
+        private readonly SetPersonInfo _set_person_info = default!;
 
         private readonly GetPersonInfo _get_person_info = default!;
 
@@ -36,17 +37,21 @@
 
         private delegate void LogCallback(IntPtr message);
 
+        // Dynamic library entry points.
+
         private delegate void SetUpLogCallback([MarshalAs(UnmanagedType.FunctionPtr)] LogCallback logCallback);
 
         private delegate void DisposeLogCallback();
 
         private delegate IntPtr CreatePerson();
 
-        private delegate IntPtr ConfigPerson(IntPtr person, ref StructBox.ConfigPerson config_person);
+        private delegate void SetPersonMonitor(IntPtr person, [MarshalAs(UnmanagedType.FunctionPtr)] NativeDelegates.PersonMonitorCallback personMonitorCallback);
 
-        private delegate IntPtr GetPersonInfo(IntPtr person);
+        private delegate void SetPersonInfo(IntPtr person, ref StructBox.PersonInfo person_info);
 
-        private delegate IntPtr DestroyPerson(IntPtr person);
+        private delegate void GetPersonInfo(IntPtr person, ref StructBox.PersonInfo person_info);
+
+        private delegate void DestroyPerson(IntPtr person);
 
         #endregion
 
@@ -58,8 +63,7 @@
 
             try
             {
-                _native_library = NativeLibrary.Load(
-                    "pinvoke.library.managed",
+                _native_library = NativeLibrary.Load("pinvoke.library.managed",
                     typeof(NativeWrapper).Assembly, 
                     DllImportSearchPath.AssemblyDirectory
                     );
@@ -70,7 +74,8 @@
 
                 // Operations over objects.
                 _create_person = GetDelegateForNativeFunction<CreatePerson>("createPerson");
-                _config_person = GetDelegateForNativeFunction<ConfigPerson>("configPerson");
+                _set_person_monitor = GetDelegateForNativeFunction<SetPersonMonitor>("setPersonMonitor");
+                _set_person_info = GetDelegateForNativeFunction<SetPersonInfo>("setPersonInfo");
                 _get_person_info = GetDelegateForNativeFunction<GetPersonInfo>("getPersonInfo");
                 _destroy_person = GetDelegateForNativeFunction<DestroyPerson>("destroyPerson");
 
@@ -101,14 +106,21 @@
             return _create_person();
         }
 
-        public void config_person(IntPtr person, ref StructBox.ConfigPerson config_person)
+        public void setPersonMonitor(
+            IntPtr person, 
+            [MarshalAs(UnmanagedType.FunctionPtr)] NativeDelegates.PersonMonitorCallback personMonitorCallback)
         {
-            _config_person(person, ref config_person);
+            _set_person_monitor(person, personMonitorCallback);
         }
 
-        public IntPtr get_person_info(IntPtr person)
+        public void config_person(IntPtr person, ref StructBox.PersonInfo person_info)
         {
-            return _get_person_info(person);
+            _set_person_info(person, ref person_info);
+        }
+
+        public void get_person_info(IntPtr person, ref StructBox.PersonInfo person_info)
+        {
+            _get_person_info(person, ref person_info);
         }
 
         public void destroy_person(IntPtr person)
@@ -154,6 +166,7 @@
 
             return Marshal.GetDelegateForFunctionPointer<T>(function_pointer);
         }
+
         #endregion
     }
 }

@@ -8,8 +8,58 @@ Demo about how p/invoke works.
 - ✅ Lifecycle (create, edit and destroy) of native object and send it for the native manage code.
 - ✅ Managed code editing values for native object.
 - ✅🚀 Log based on C++ callback: communication between C++ and C#.
+- ✅⭐ Event management from C# using C++ callbacks and established on runtime (C++ source code protection with mutex)
 
-## B. Documentation
+## B. Managed code execution console application example output: **C# code calling C++ library**
+
+Example of simulation the beats per minute of a person. C++ code simulates the beats per minute with a thred that generates random numbers.
+
+```
+PS J:\Repositories\demopinvoke\pinvoke.consoleapp\bin\Release\net8.0> .\pinvoke.consoleapp.exe
+info: pinvoke.consoleapp.Native.NativeWrapper[0]
+      [NATIVE_CODE] [INFO][API.cpp:setUpLogCallback:13] Initalize native logger.
+info: pinvoke.consoleapp.Native.NativeWrapper[0]
+      [NATIVE_CODE] [INFO][API.cpp:createPerson:25] Creating person...
+info: pinvoke.consoleapp.Native.NativeWrapper[0]
+      [NATIVE_CODE] [INFO][Person.cpp:Person::Person:39] Called constructor, object: 0000022F800BF150
+info: pinvoke.consoleapp.Services.MainService[0]
+      Waiting 5000 ms to display events.
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi, PPM: 101
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi, PPM: 135
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi, PPM: 102
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi, PPM: 61
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi, PPM: 111
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi, PPM: 175
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi, PPM: 164
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi, PPM: 136
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi, PPM: 160
+info: pinvoke.consoleapp.Services.MainService[0]
+      ID: 19941994
+info: pinvoke.consoleapp.Services.MainService[0]
+      Age: 29
+info: pinvoke.consoleapp.Services.MainService[0]
+      Name: Javi
+info: pinvoke.consoleapp.Native.NativeWrapper[0]
+      [NATIVE_CODE] [INFO][Person.cpp:Person::~Person:50] Deatached thread: 11112
+info: pinvoke.consoleapp.Native.NativeWrapper[0]
+      [NATIVE_CODE] [INFO][Person.cpp:Person::~Person:59] Deatached thread successfully.
+info: pinvoke.consoleapp.Native.NativeWrapper[0]
+      [NATIVE_CODE] [INFO][Person.cpp:Person::~Person:66] Called destructor, object: 0000022F800BF150
+info: pinvoke.consoleapp.Native.NativeWrapper[0]
+      [NATIVE_CODE] [INFO][API.cpp:disposeLogCallback:18] Dispose native logger.
+PS J:\Repositories\demopinvoke\pinvoke.consoleapp\bin\Release\net8.0>
+```
+
+## C. Documentation
 
 - [MSDN: Native library loading](https://learn.microsoft.com/en-us/dotnet/standard/native-interop/native-library-loading)
 - [Hot Examples: update](https://csharp.hotexamples.com/site/file?hash=0x5ea59faae95926824d1676d7e6534832f9b73f1c41d7e3f2622198711090b595&fullName=dd-trace-dotnet-master/tracer/src/Datadog.Trace/AppSec/Waf/WafNative.cs&project=lucaspimentel/dd-trace-dotnet)
