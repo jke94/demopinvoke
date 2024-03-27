@@ -19,8 +19,13 @@ void Person::do_live()
 
         int tmp_ppm = PERSON_PPM_MIN + (std::rand() % (PERSON_PPM_MAX - PERSON_PPM_MIN + 1));
         set_ppm(tmp_ppm);
-        //_person_ppm_callback(_name, tmp_ppm); //TODO: Implement
-    } while (_thread_life.joinable());
+
+        if (_person_monitor_callback)
+        {
+            _person_monitor_callback(name_, tmp_ppm);
+        }
+    } 
+    while (_thread_life.joinable());
 }
 
 Person::Person()
@@ -76,18 +81,31 @@ void Person::setName(char* name)
     name_ = name;
 }
 
+void Person::setPersonMonitorCallback(PERSON_MONITOR_CALLBACK person_monitor_callback)
+{
+    std::lock_guard<std::mutex> guard(person_mutex);
+
+    _person_monitor_callback = person_monitor_callback;
+}
+
 int Person::getId()
 {
+    std::lock_guard<std::mutex> guard(person_mutex);
+
     return id_;
 }
 
 int Person::getAge()
 {
+    std::lock_guard<std::mutex> guard(person_mutex);
+
     return age_;
 }
 
 char* Person::getName()
 {
+    std::lock_guard<std::mutex> guard(person_mutex);
+
     return name_;
 }
 

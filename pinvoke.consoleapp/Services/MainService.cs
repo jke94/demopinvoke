@@ -14,6 +14,9 @@
 
         private ILogger<MainService> _logger;
         private INativeWrapper _nativeWrapper;
+        private int _wait_time_in_milliseconds = 5000;
+
+        private NativeDelegates.PersonMonitorCallback personMonitorCallback = default!;
 
         #endregion
 
@@ -31,11 +34,20 @@
 
         #region Methods
 
+        public void simple_test(IntPtr name, int ppm)
+        {
+            _logger.LogInformation($"Name: {Marshal.PtrToStringAnsi(name)}, PPM: {ppm}");
+        }
+
         public void Run()
         {
             try
             {
+                personMonitorCallback = simple_test;
+
                 IntPtr native_person = _nativeWrapper.create_person();
+
+                _nativeWrapper.setPersonMonitor(native_person, personMonitorCallback);
 
                 var person_info = new StructBox.PersonInfo
                 {
@@ -46,6 +58,10 @@
                 };
 
                 _nativeWrapper.config_person(native_person, ref person_info);
+
+                _logger.LogInformation($"Waiting {_wait_time_in_milliseconds} ms to display events.");
+
+                Thread.Sleep(_wait_time_in_milliseconds);
 
                 StructBox.PersonInfo person_info_returned = new();
 

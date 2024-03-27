@@ -40,6 +40,11 @@ void getPersonInfo(IPerson* person, PersonInfo* person_info)
     person_info->name = person->getName();
 }
 
+void setPersonMonitor(IPerson* person, PERSON_MONITOR_CALLBACK person_monitor_callback)
+{
+    person->setPersonMonitorCallback(person_monitor_callback);
+}
+
 void destroyPerson(IPerson* person) 
 {
     delete person;
