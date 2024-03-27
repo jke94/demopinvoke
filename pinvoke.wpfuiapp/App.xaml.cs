@@ -7,7 +7,11 @@
     using Microsoft.Extensions.DependencyInjection;
     using System.IO;
     using System.Windows;
-    
+    using pinvoke.wpfuiapp.ViewModel;
+    using pinvoke.wpfuiapp.Services;
+    using System;
+
+
     #endregion
 
     /// <summary>
@@ -39,6 +43,12 @@
             ConfigureServices(serviceCollection);
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
+
+            var mainViewModel = ServiceProvider.GetRequiredService<IMainViewModel>();
+
+            Resources.Add("MyMainViewModel", mainViewModel);
+
+            base.OnStartup(e);
         }
 
         #endregion
@@ -47,6 +57,8 @@
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IMainViewModel, MainViewModel>();
+            services.AddScoped<IMainService, MainService>();
             services.AddNativeWrapperServices();
         }
 
