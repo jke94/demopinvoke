@@ -10,7 +10,7 @@
 #   define EXPORT __declspec(dllimport)
 #endif
 
-struct ConfigPerson
+struct PersonInfo
 {
     int id;
     int age;
@@ -34,8 +34,8 @@ EXPORT void setUpLogCallback(void(*log_callback)(const char* str));
 EXPORT void disposeLogCallback();
 
 EXPORT IPerson* createPerson();
-EXPORT void configPerson(IPerson* person, ConfigPerson* config_person);
-EXPORT void getPersonInfo(IPerson* person, ConfigPerson* config_person);
+EXPORT void setPersonInfo(IPerson* person, PersonInfo* person_info);
+EXPORT void getPersonInfo(IPerson* person, PersonInfo* person_info);
 EXPORT void destroyPerson(IPerson* person);
 
 #endif

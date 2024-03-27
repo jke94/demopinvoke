@@ -23,7 +23,7 @@
 
         private readonly CreatePerson _create_person = default!;
 
-        private readonly ConfigPerson _config_person = default!;
+        private readonly SetPersonInfo _set_person_info = default!;
 
         private readonly GetPersonInfo _get_person_info = default!;
 
@@ -41,9 +41,9 @@
 
         private delegate IntPtr CreatePerson();
 
-        private delegate void ConfigPerson(IntPtr person, ref StructBox.ConfigPerson config_person);
+        private delegate void SetPersonInfo(IntPtr person, ref StructBox.PersonInfo person_info);
 
-        private delegate void GetPersonInfo(IntPtr person, ref StructBox.ConfigPerson config_person);
+        private delegate void GetPersonInfo(IntPtr person, ref StructBox.PersonInfo person_info);
 
         private delegate void DestroyPerson(IntPtr person);
 
@@ -69,7 +69,7 @@
 
                 // Operations over objects.
                 _create_person = GetDelegateForNativeFunction<CreatePerson>("createPerson");
-                _config_person = GetDelegateForNativeFunction<ConfigPerson>("configPerson");
+                _set_person_info = GetDelegateForNativeFunction<SetPersonInfo>("setPersonInfo");
                 _get_person_info = GetDelegateForNativeFunction<GetPersonInfo>("getPersonInfo");
                 _destroy_person = GetDelegateForNativeFunction<DestroyPerson>("destroyPerson");
 
@@ -100,14 +100,14 @@
             return _create_person();
         }
 
-        public void config_person(IntPtr person, ref StructBox.ConfigPerson config_person)
+        public void config_person(IntPtr person, ref StructBox.PersonInfo person_info)
         {
-            _config_person(person, ref config_person);
+            _set_person_info(person, ref person_info);
         }
 
-        public void get_person_info(IntPtr person, ref StructBox.ConfigPerson config_person)
+        public void get_person_info(IntPtr person, ref StructBox.PersonInfo person_info)
         {
-            _get_person_info(person, ref config_person);
+            _get_person_info(person, ref person_info);
         }
 
         public void destroy_person(IntPtr person)

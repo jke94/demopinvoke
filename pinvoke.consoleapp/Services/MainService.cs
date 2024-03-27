@@ -37,7 +37,7 @@
             {
                 IntPtr native_person = _nativeWrapper.create_person();
 
-                StructBox.ConfigPerson config_person = new StructBox.ConfigPerson
+                var person_info = new StructBox.PersonInfo
                 {
                     id = 19941994,
                     age = 29,
@@ -45,9 +45,9 @@
                     name = Marshal.StringToHGlobalAnsi("Javi")
                 };
 
-                _nativeWrapper.config_person(native_person, ref config_person);
+                _nativeWrapper.config_person(native_person, ref person_info);
 
-                StructBox.ConfigPerson person_info = new();
+                StructBox.PersonInfo person_info_returned = new();
 
                 _nativeWrapper.get_person_info(native_person, ref person_info);
 
@@ -59,7 +59,7 @@
                 _logger.LogInformation($"Name: {person.Name}");
 
                 // Libera la memoria asignada
-                Marshal.FreeHGlobal(config_person.name);
+                Marshal.FreeHGlobal(person_info_returned.name);
 
                 _nativeWrapper.destroy_person(native_person);
             }

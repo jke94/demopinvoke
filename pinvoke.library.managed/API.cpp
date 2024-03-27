@@ -27,17 +27,17 @@ IPerson* createPerson()
     return new Person();
 }
 
-void configPerson(IPerson* person, ConfigPerson* config_person)
+void setPersonInfo(IPerson* person, PersonInfo* person_info)
 {
-    person->setId(config_person->id);
-    person->setAge(config_person->age);
-    person->setName(config_person->name);
+    person->setId(person_info->id);
+    person->setAge(person_info->age);
+    person->setName(person_info->name);
 }
-void getPersonInfo(IPerson* person, ConfigPerson* config_person)
+void getPersonInfo(IPerson* person, PersonInfo* person_info)
 {
-    config_person->id = person->getId();
-    config_person->age = person->getAge();
-    config_person->name = person->getName();
+    person_info->id = person->getId();
+    person_info->age = person->getAge();
+    person_info->name = person->getName();
 }
 
 void destroyPerson(IPerson* person) 
