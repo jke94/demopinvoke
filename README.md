@@ -8,6 +8,7 @@ Demo about how p/invoke works.
 - ✅ Lifecycle (create, edit and destroy) of native object and send it for the native manage code.
 - ✅ Managed code editing values for native object.
 - ✅🚀 Log based on C++ callback: communication between C++ and C#.
+- ✅⭐ Event management from C# using C++ callbacks and established on runtime (C++ source code protection with mutex)
 
 ## B. Documentation
 
