@@ -65,3 +65,4 @@ PS J:\Repositories\demopinvoke\pinvoke.consoleapp\bin\Release\net8.0>
 - [Hot Examples: update](https://csharp.hotexamples.com/site/file?hash=0x5ea59faae95926824d1676d7e6534832f9b73f1c41d7e3f2622198711090b595&fullName=dd-trace-dotnet-master/tracer/src/Datadog.Trace/AppSec/Waf/WafNative.cs&project=lucaspimentel/dd-trace-dotnet)
 - [Red Hat Developers: tInteracting with native libraries in .NET Core 3.0](https://developers.redhat.com/blog/2019/09/06/interacting-with-native-libraries-in-net-core-3-0#)
 - [Manski's Dev Log: P/Invoke Tutorial: Passing strings (Part 2)](https://manski.net/articles/dotnet/pinvoke-tutorial/part-2--passing-strings)
+- [Easily Create Shared Libraries with CMake (Part 1)](https://blog.shaduri.dev/easily-create-shared-libraries-with-cmake-part-1)
