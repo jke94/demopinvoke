@@ -11,7 +11,6 @@
     using pinvoke.wpfuiapp.Services;
     using System;
 
-
     #endregion
 
     /// <summary>
@@ -40,6 +39,7 @@
             Configuration = builder.Build();
 
             var serviceCollection = new ServiceCollection();
+
             ConfigureServices(serviceCollection);
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
@@ -57,12 +57,16 @@
 
         private void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddNativeWrapperServices();
+            services.AddLogging();
             services.AddScoped<IMainViewModel, MainViewModel>();
             services.AddScoped<IMainService, MainService>();
-            services.AddNativeWrapperServices();
+
         }
 
         #endregion
     }
+    public class ApplicationLogger {   }
 
 }
