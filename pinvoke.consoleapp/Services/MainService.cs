@@ -47,9 +47,11 @@
 
                 _nativeWrapper.config_person(native_person, ref config_person);
 
-                IntPtr show_person_info = _nativeWrapper.get_person_info(native_person);
+                StructBox.ConfigPerson person_info = new();
 
-                var person = show_person_info.ToStructConfigPerson();
+                _nativeWrapper.get_person_info(native_person, ref person_info);
+
+                var person = person_info.ToPerson();
 
                 // Imprime la información de la persona
                 _logger.LogInformation($"ID: {person.Id}");

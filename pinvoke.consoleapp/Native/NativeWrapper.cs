@@ -1,6 +1,5 @@
 ﻿namespace pinvoke.consoleapp.Native
 {
-    using System.Reflection.Metadata;
     #region using
 
     using System.Runtime.InteropServices;
@@ -42,11 +41,11 @@
 
         private delegate IntPtr CreatePerson();
 
-        private delegate IntPtr ConfigPerson(IntPtr person, ref StructBox.ConfigPerson config_person);
+        private delegate void ConfigPerson(IntPtr person, ref StructBox.ConfigPerson config_person);
 
-        private delegate IntPtr GetPersonInfo(IntPtr person);
+        private delegate void GetPersonInfo(IntPtr person, ref StructBox.ConfigPerson config_person);
 
-        private delegate IntPtr DestroyPerson(IntPtr person);
+        private delegate void DestroyPerson(IntPtr person);
 
         #endregion
 
@@ -106,9 +105,9 @@
             _config_person(person, ref config_person);
         }
 
-        public IntPtr get_person_info(IntPtr person)
+        public void get_person_info(IntPtr person, ref StructBox.ConfigPerson config_person)
         {
-            return _get_person_info(person);
+            _get_person_info(person, ref config_person);
         }
 
         public void destroy_person(IntPtr person)

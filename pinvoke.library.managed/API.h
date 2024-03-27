@@ -27,6 +27,7 @@ class IPerson
         virtual int getId() = 0;
         virtual int getAge() = 0;
         virtual char* getName() = 0;
+        virtual int get_ppm() = 0;
 };
 
 EXPORT void setUpLogCallback(void(*log_callback)(const char* str));
@@ -34,7 +35,7 @@ EXPORT void disposeLogCallback();
 
 EXPORT IPerson* createPerson();
 EXPORT void configPerson(IPerson* person, ConfigPerson* config_person);
-EXPORT ConfigPerson* getPersonInfo(IPerson* person);
+EXPORT void getPersonInfo(IPerson* person, ConfigPerson* config_person);
 EXPORT void destroyPerson(IPerson* person);
 
 #endif

@@ -18,5 +18,14 @@
 
             return person;
         }
+
+        public static IPerson ToPerson(this StructBox.ConfigPerson config_person)
+        {
+            string name = Marshal.PtrToStringAnsi(config_person.name) ?? string.Empty;
+
+            var person = new Person(config_person.id, config_person.age, name);
+
+            return person;
+        }
     }
 }
