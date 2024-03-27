@@ -1,4 +1,4 @@
-﻿namespace pinvoke.consoleapp.Native
+﻿namespace pinvoke.nativewrapperlibrary.Native
 {
     public static class NativeDelegates
     {

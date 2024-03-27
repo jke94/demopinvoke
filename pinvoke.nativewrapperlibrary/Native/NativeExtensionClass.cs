@@ -1,9 +1,9 @@
-﻿namespace pinvoke.consoleapp.Native
+﻿namespace pinvoke.nativewrapperlibrary.Native
 {
     #region using
 
     using System.Runtime.InteropServices;
-    using pinvoke.consoleapp.Model;
+    using pinvoke.nativewrapperlibrary.Model;
 
     #endregion
 
