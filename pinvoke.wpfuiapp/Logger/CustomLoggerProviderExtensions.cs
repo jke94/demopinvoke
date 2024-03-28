@@ -2,7 +2,7 @@
 {
     #region using
 
-    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
     #endregion
@@ -10,11 +10,11 @@
     public static class CustomLoggerProviderExtensions
     {
         public static ILoggingBuilder AddCustomLogger(
-            this ILoggingBuilder loggingBuilder, 
-            IConfiguration configuration)
+            this ILoggingBuilder loggingBuilder,
+            Action<LoggerFileOptions> configure)
         {
-            var loggerProvider = new CustomLoggerProvider(configuration);
-            loggingBuilder.AddProvider(loggerProvider);
+            loggingBuilder.Services.AddSingleton<ILoggerProvider, CustomLoggerProvider>();
+            loggingBuilder.Services.Configure(configure);
 
             return loggingBuilder;
         }

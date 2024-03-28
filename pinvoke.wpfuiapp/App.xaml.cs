@@ -52,7 +52,13 @@
             })
             .ConfigureLogging((hostBuilder, configureLogging) =>
             {
-                configureLogging.AddCustomLogger(hostBuilder.Configuration);
+                configureLogging.AddCustomLogger( options =>
+                {
+                    hostBuilder.Configuration
+                    .GetSection("LogInformation")
+                    .GetSection("Options")
+                    .Bind(options);
+                });
             });
 
         #endregion

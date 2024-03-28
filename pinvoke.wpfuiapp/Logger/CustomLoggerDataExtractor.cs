@@ -12,28 +12,22 @@
     {
         #region Private Fields
 
-        private readonly string _name;
-
-        private readonly string _logFilePath;
+        protected readonly CustomLoggerProvider _customLoggerProvider;
 
         #endregion
 
         #region Constructor
 
-        public CustomLoggerDataExtractor(string name, string logFilePath) 
+        public CustomLoggerDataExtractor(CustomLoggerProvider customLoggerProvider) 
         {
-            _logFilePath = logFilePath;
-            _name = name;
+            _customLoggerProvider = customLoggerProvider;
         }
 
         #endregion
 
         #region Public Methods
 
-        public IDisposable? BeginScope<TState>(TState state)
-        {
-            return default;
-        }
+        public IDisposable? BeginScope<TState>(TState state) => null;
 
         public bool IsEnabled(LogLevel logLevel) => default;
 
@@ -41,12 +35,12 @@
         {
             try
             {
-                var messge = $"[{CustomStrDate()}][{logLevel}][{_name.Split('.')?.Last() ?? _name}][{formatter(state, exception)}]";
+                var fullFilePath = _customLoggerProvider.Options.LogFileName.Replace("{date}", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss"));
+                var messge = $"[{CustomStrDate()}][{logLevel}][{formatter(state, exception)}]";
 
-                if (File.Exists(_logFilePath))
-                {
-                    File.AppendAllText(_logFilePath, messge + Environment.NewLine);
-                }
+
+                using var streamWriter = new StreamWriter(fullFilePath, true);
+                streamWriter.WriteLine(messge);
             }
             catch (Exception)
             {
