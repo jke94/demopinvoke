@@ -65,8 +65,7 @@
             {
                 _native_library = NativeLibrary.Load("pinvoke.library.managed",
                     typeof(NativeWrapper).Assembly, 
-                    DllImportSearchPath.AssemblyDirectory
-                    );
+                    DllImportSearchPath.AssemblyDirectory);
 
                 // Native logging
                 _setUpLogCallback = GetDelegateForNativeFunction<SetUpLogCallback>("setUpLogCallback");
