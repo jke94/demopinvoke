@@ -28,7 +28,7 @@
 
         public ILogger CreateLogger(string categoryName)
         {
-            return new CustomLoggerDataExtractor(this);
+            return new CustomLoggerDataExtractor(categoryName, this);
         }
 
         public void Dispose()

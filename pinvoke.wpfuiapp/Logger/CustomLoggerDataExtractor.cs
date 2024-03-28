@@ -13,14 +13,18 @@
         #region Private Fields
 
         protected readonly CustomLoggerProvider _customLoggerProvider;
+        private readonly string _fullFileLoggerPath;
+        private readonly string _categoryName;
 
         #endregion
 
         #region Constructor
 
-        public CustomLoggerDataExtractor(CustomLoggerProvider customLoggerProvider) 
+        public CustomLoggerDataExtractor(string categoyName, CustomLoggerProvider customLoggerProvider) 
         {
+            _categoryName = categoyName;
             _customLoggerProvider = customLoggerProvider;
+            _fullFileLoggerPath = _customLoggerProvider.Options.LogFileName.Replace("{date}", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss"));
         }
 
         #endregion
@@ -35,11 +39,9 @@
         {
             try
             {
-                var fullFilePath = _customLoggerProvider.Options.LogFileName.Replace("{date}", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss"));
-                var messge = $"[{CustomStrDate()}][{logLevel}][{formatter(state, exception)}]";
+                var messge = $"[{CustomStrDate()}][{logLevel}][{_categoryName}][{formatter(state, exception)}]";
 
-
-                using var streamWriter = new StreamWriter(fullFilePath, true);
+                using var streamWriter = new StreamWriter(_fullFileLoggerPath, true);
                 streamWriter.WriteLine(messge);
             }
             catch (Exception)

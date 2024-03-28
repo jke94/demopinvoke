@@ -55,6 +55,7 @@
                 configureLogging.AddCustomLogger( options =>
                 {
                     hostBuilder.Configuration
+                    .GetSection("Logging")
                     .GetSection("LogInformation")
                     .GetSection("Options")
                     .Bind(options);
