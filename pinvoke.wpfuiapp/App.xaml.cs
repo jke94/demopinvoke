@@ -10,6 +10,8 @@
     using pinvoke.wpfuiapp.ViewModel;
     using pinvoke.wpfuiapp.Services;
     using System;
+    using Microsoft.Extensions.Hosting;
+    using pinvoke.wpfuiapp.Logger;
 
     #endregion
 
@@ -20,49 +22,70 @@
     {
         #region Private Fields
 
-        public IServiceProvider? ServiceProvider { get; private set; }
-
-        public IConfiguration? Configuration { get; private set; }
+        private readonly IHost _host;
 
         #endregion
 
-        #region Protected Methods
+        #region Constructor
 
-        protected override void OnStartup(StartupEventArgs e)
+        public App()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", 
-                optional: false, 
-                reloadOnChange: true);
-
-            Configuration = builder.Build();
-
-            var serviceCollection = new ServiceCollection();
-
-            ConfigureServices(serviceCollection);
-
-            ServiceProvider = serviceCollection.BuildServiceProvider();
-
-            var mainViewModel = ServiceProvider.GetRequiredService<IMainViewModel>();
-
-            Resources.Add("MyMainViewModel", mainViewModel);
-
-            base.OnStartup(e);
+            _host = CreateWpfHostBuilder().Build();
         }
+
+        #endregion
+
+        #region Public Methods
+
+        private static IHostBuilder CreateWpfHostBuilder() =>
+            Host.CreateDefaultBuilder()
+            .ConfigureServices((hostContext, services) =>
+            {
+                SetCustomServices(services);
+            })
+            .ConfigureAppConfiguration((ctx, cfg) =>
+            {
+                cfg.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json",
+                optional: false,
+                reloadOnChange: true);
+            })
+            .ConfigureLogging((hostBuilder, configureLogging) =>
+            {
+                configureLogging.AddCustomLogger(hostBuilder.Configuration);
+            });
 
         #endregion
 
         #region Private Methods
 
-        private void ConfigureServices(IServiceCollection services)
+        private async void Application_Startup(object sender, StartupEventArgs e)
+        {
+            await _host.StartAsync();
+
+            var mainViewModel = _host.Services.GetRequiredService<IMainViewModel>();
+
+            Resources.Add("MyMainViewModel", mainViewModel);
+
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
+        }
+
+        private async void Application_Exit(object sender, ExitEventArgs e)
+        {
+            using (_host)
+            {
+                await _host.StopAsync(TimeSpan.FromSeconds(10));
+            }
+        }
+
+        private static void SetCustomServices(IServiceCollection services)
         {
             services.AddNativeWrapperServices();
             services.AddLogging();
             services.AddScoped<IMainViewModel, MainViewModel>();
             services.AddScoped<IMainService, MainService>();
         }
-
         #endregion
     }
 }
