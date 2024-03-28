@@ -4,22 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="Beats per minute monitor (Fake)" 
         Height="450" 
         Width="800"
         DataContext="{DynamicResource MyMainViewModel}">
-    <StackPanel HorizontalAlignment="Center" 
-                VerticalAlignment="Center"
-                Orientation="Vertical">
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock FontSize="30" Text="Name"></TextBlock>
-                <TextBlock FontSize="30" Text="{Binding Name,   UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock FontSize="30" Text="PPM"></TextBlock>
-                <TextBlock FontSize="30" Text="{Binding PPM,    UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-            </StackPanel>
-        </StackPanel>
-    </StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" FontSize="30" Text="Name" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0" FontSize="30" Text="PPM" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+
+        <TextBlock Grid.Row="0" 
+                   Grid.Column="1" 
+                   Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                   FontSize="30" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="1" 
+                   Grid.Column="1" 
+                   Text="{Binding PPM,  UpdateSourceTrigger=PropertyChanged}" 
+                   FontSize="30" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"/>
+
+    </Grid>
 </Window>
