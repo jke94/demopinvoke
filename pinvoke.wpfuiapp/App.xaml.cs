@@ -57,16 +57,12 @@
 
         private void ConfigureServices(IServiceCollection services)
         {
-
             services.AddNativeWrapperServices();
             services.AddLogging();
             services.AddScoped<IMainViewModel, MainViewModel>();
             services.AddScoped<IMainService, MainService>();
-
         }
 
         #endregion
     }
-    public class ApplicationLogger {   }
-
 }

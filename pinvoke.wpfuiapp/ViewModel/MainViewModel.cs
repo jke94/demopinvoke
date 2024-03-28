@@ -1,10 +1,12 @@
 ﻿namespace pinvoke.wpfuiapp.ViewModel
 {
-    using pinvoke.nativewrapperlibrary.Native;
     #region using
 
+    using pinvoke.nativewrapperlibrary.Native;
     using pinvoke.wpfuiapp.Services;
     using System.ComponentModel;
+    using System;
+    using Microsoft.Extensions.Logging;
 
     #endregion
 
@@ -12,7 +14,7 @@
     {
         #region Properties
 
-        public string Title { get; set; }
+        public string Name { get; set; }
 
         public string PPM { get; set; }
 
@@ -23,34 +25,52 @@
     {
         #region Private Fields
 
-        private string _title;
-        private string _ppm;
-        private readonly IMainService _mainService;
-        private readonly INativeWrapper _nativeWrapper;
+        private string _name = default!;
+        private string _ppm = default!;
+        private readonly IMainService _mainService = default!;
+        private readonly INativeWrapper _nativeWrapper = default!;
+        private readonly ILogger<MainViewModel> _logger = default!;
+        private IntPtr _native_person = default!;
+        bool is_disposed = false;
+
+        private NativeDelegates.PersonMonitorCallback personMonitorCallback = default!;
 
         #endregion
 
+        #region Constructor
+
         public MainViewModel(
             IMainService mainService,
-            INativeWrapper nativeWrapper
+            INativeWrapper nativeWrapper,
+            ILogger<MainViewModel> logger
             )
         {
             _mainService = mainService;
             _nativeWrapper = nativeWrapper;
-            _title = "Hello world! I am Javi!";
+            _logger = logger;
+            _name = "Hello world! I am Javi!";
             _ppm = "-10";
+
+            _native_person = _nativeWrapper.create_person();
+
+            personMonitorCallback = update_ppm;
+            _nativeWrapper.setPersonMonitor(_native_person, personMonitorCallback);
         }
 
-        public string Title
+        #endregion
+
+        #region Properties
+
+        public string Name
         {
             get 
             { 
-                return _title; 
+                return _name; 
             }
             set 
             { 
-                _title = value;
-                OnPropertyChanged(nameof(Title));
+                _name = value;
+                OnPropertyChanged(nameof(Name));
             }
         }
 
@@ -66,26 +86,53 @@
                 OnPropertyChanged(nameof(PPM));
             }
         }
-        #region Events
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         #endregion
 
         #region Methods
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
+
+        #region Protected Methods
+
         protected void OnPropertyChanged(string propertyName)
         {
-            if(PropertyChanged != null)
+            if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
+            if (!is_disposed) // only dispose once!
+            {
+                _nativeWrapper.destroy_person(_native_person);
+            }
+
+            is_disposed = true;
         }
+
+        #endregion
+
+        #region Private Methods
+
+        public void update_ppm(IntPtr name, int ppm)
+        {
+            PPM = ppm.ToString();
+        }
+
+        #endregion
+
+        #region Events
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         #endregion
     }

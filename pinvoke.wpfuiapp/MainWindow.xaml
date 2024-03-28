@@ -3,12 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:pinvoke.wpfuiapp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" 
+        Height="450" 
+        Width="800"
+        DataContext="{DynamicResource MyMainViewModel}">
+    <StackPanel HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label FontSize="30" Content="Name"></Label>
+                <TextBlock FontSize="30" Text="{Binding Name,   UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label FontSize="30" Content="PPM"></Label>
+                <TextBlock FontSize="30" Text="{Binding PPM,    UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            </StackPanel>
+        </StackPanel>
 
-    <Grid DataContext="{DynamicResource MyMainViewModel}">
-        <TextBlock Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-        
-    </Grid>
+    </StackPanel>
 </Window>
