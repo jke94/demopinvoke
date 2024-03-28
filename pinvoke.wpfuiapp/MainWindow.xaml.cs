@@ -2,7 +2,6 @@
 {
     #region using
 
-    using System;
     using System.Windows;
 
     #endregion
@@ -15,15 +14,6 @@
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            if (DataContext is IDisposable viewmodel)
-            {
-                viewmodel.Dispose();
-            }
-            base.OnClosed(e);
         }
     }
 }

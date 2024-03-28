@@ -13,14 +13,13 @@
                 Orientation="Vertical">
         <StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label FontSize="30" Content="Name"></Label>
+                <TextBlock FontSize="30" Text="Name"></TextBlock>
                 <TextBlock FontSize="30" Text="{Binding Name,   UpdateSourceTrigger=PropertyChanged}"></TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label FontSize="30" Content="PPM"></Label>
+                <TextBlock FontSize="30" Text="PPM"></TextBlock>
                 <TextBlock FontSize="30" Text="{Binding PPM,    UpdateSourceTrigger=PropertyChanged}"></TextBlock>
             </StackPanel>
         </StackPanel>
-
     </StackPanel>
 </Window>
