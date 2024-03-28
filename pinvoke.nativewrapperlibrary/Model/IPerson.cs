@@ -1,4 +1,4 @@
-﻿namespace pinvoke.consoleapp.Model
+﻿namespace pinvoke.nativewrapperlibrary.Model
 {
     public interface IPerson
     {

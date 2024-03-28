@@ -4,7 +4,7 @@
 
     using System.Runtime.InteropServices;
     using Microsoft.Extensions.Logging;
-    using pinvoke.consoleapp.Native;
+    using pinvoke.nativewrapperlibrary.Native;
 
     #endregion
 

@@ -12,13 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\pinvoke.library.managed\pinvoke.library.managed.vcxproj" />
+    <ProjectReference Include="..\pinvoke.nativewrapperlibrary\pinvoke.nativewrapperlibrary.csproj" />
   </ItemGroup>
+	<Target Name="CopyFiles" AfterTargets="AfterBuild">
+		<Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.dll" DestinationFolder="$(OutDir)" />
+		<Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.pdb" DestinationFolder="$(OutDir)" />
 
-  <Target Name="CopyFiles" AfterTargets="AfterBuild">
-    <Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.dll" DestinationFolder="$(OutDir)"/>
-    <Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles="$(SolutionDir)\x64\Debug\pinvoke.library.managed.pdb" DestinationFolder="$(OutDir)"/>
-    
-    <Copy Condition="'$(Configuration)' == 'Release'" SourceFiles="$(SolutionDir)\x64\Release\pinvoke.library.managed.dll" DestinationFolder="$(OutDir)" />
-  </Target>
+		<Copy Condition="'$(Configuration)' == 'Release'" SourceFiles="$(SolutionDir)\x64\Release\pinvoke.library.managed.dll" DestinationFolder="$(OutDir)" />
+	</Target>
 </Project>

@@ -4,7 +4,7 @@
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using pinvoke.consoleapp.Native;
+    using pinvoke.nativewrapperlibrary;
     using pinvoke.consoleapp.Services;
 
     #endregion
@@ -17,8 +17,9 @@
             Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
-                services.AddSingleton<INativeWrapper, NativeWrapper>();
+
                 services.AddTransient<IMainService, MainService>();
+                services.AddNativeWrapperServices();
             });
 
         #endregion

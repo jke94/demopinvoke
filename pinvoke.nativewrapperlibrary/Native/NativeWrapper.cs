@@ -1,4 +1,4 @@
-﻿namespace pinvoke.consoleapp.Native
+﻿namespace pinvoke.nativewrapperlibrary.Native
 {
     #region using
 
@@ -65,8 +65,7 @@
             {
                 _native_library = NativeLibrary.Load("pinvoke.library.managed",
                     typeof(NativeWrapper).Assembly, 
-                    DllImportSearchPath.AssemblyDirectory
-                    );
+                    DllImportSearchPath.AssemblyDirectory);
 
                 // Native logging
                 _setUpLogCallback = GetDelegateForNativeFunction<SetUpLogCallback>("setUpLogCallback");
@@ -103,28 +102,36 @@
 
         public IntPtr create_person()
         {
-            return _create_person();
+            var person = _create_person();
+
+            _logger.LogInformation($"Created person: {person}");
+
+            return person;
         }
 
         public void setPersonMonitor(
             IntPtr person, 
             [MarshalAs(UnmanagedType.FunctionPtr)] NativeDelegates.PersonMonitorCallback personMonitorCallback)
         {
+            _logger.LogInformation($"Set person {person} person monitor callback.");
             _set_person_monitor(person, personMonitorCallback);
         }
 
         public void config_person(IntPtr person, ref StructBox.PersonInfo person_info)
         {
+            _logger.LogInformation($"Config person {person} person monitor callback.");
             _set_person_info(person, ref person_info);
         }
 
         public void get_person_info(IntPtr person, ref StructBox.PersonInfo person_info)
         {
+            _logger.LogInformation($"Getting person {person} info: {person_info.GetHashCode()}");
             _get_person_info(person, ref person_info);
         }
 
         public void destroy_person(IntPtr person)
         {
+            _logger.LogInformation($"Destroy person: {person}");
             _destroy_person(person);
         }
 
