@@ -10,6 +10,10 @@
 #include "API.h"
 #include "Hoge.h"
 // add headers that you want to pre-compile here
-#include "framework.h"
+
+#if defined(_WIN32)
+    // TODO: Remove this file from Visual Studio project.
+	#include "framework.h"
+#endif
 
 #endif //PCH_H

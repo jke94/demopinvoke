@@ -60,9 +60,24 @@ info: pinvoke.consoleapp.Native.NativeWrapper[0]
 PS J:\Repositories\demopinvoke\pinvoke.consoleapp\bin\Release\net8.0>
 ```
 
-## C. Useful documentation.
+## C. Building library
 
-## C.1. About P/Invoke and Load Native Libraries.
+### C.1. Linux environment.
+
+1. Create **Makefile** to build.
+
+```
+cmake -B ./build
+```
+2. Build library.
+
+```
+cd build && make
+```
+
+## D. Useful documentation.
+
+## D.1. About P/Invoke and Load Native Libraries.
 
 - [MSDN: Native library loading](https://learn.microsoft.com/en-us/dotnet/standard/native-interop/native-library-loading)
 - [Hot Examples: update](https://csharp.hotexamples.com/site/file?hash=0x5ea59faae95926824d1676d7e6534832f9b73f1c41d7e3f2622198711090b595&fullName=dd-trace-dotnet-master/tracer/src/Datadog.Trace/AppSec/Waf/WafNative.cs&project=lucaspimentel/dd-trace-dotnet)
@@ -70,14 +85,14 @@ PS J:\Repositories\demopinvoke\pinvoke.consoleapp\bin\Release\net8.0>
 - [Manski's Dev Log: P/Invoke Tutorial: Passing strings (Part 2)](https://manski.net/articles/dotnet/pinvoke-tutorial/part-2--passing-strings)
 
 
-## C.2. C++ cross platform using CMake to create library.
+## D.2. C++ cross platform using CMake to create library.
 
 - [Easily Create Shared Libraries with CMake (Part 1)](https://blog.shaduri.dev/easily-create-shared-libraries-with-cmake-part-1)
 
-## C.3. About WFP .NET custom host.
+## D.3. About WFP .NET custom host.
 
 - [WPF y netcore3 con custom host](https://www.eiximenis.dev/posts/2020-01-20-wpf-netcore3-customhost/)
 
-## C.4. About .NET custom logger.
+## D.4. About .NET custom logger.
 
 - [Create your own logging provider to log to text files in .NET Core](https://www.roundthecode.com/dotnet-tutorials/create-your-own-logging-provider-to-log-to-text-files-in-net-core)
