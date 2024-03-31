@@ -4,10 +4,14 @@
 #include <string>
 #include <memory>
 
-#ifdef _WIN32
-#   define EXPORT __declspec(dllexport)
+#if defined(_WIN32)
+	#define EXPORT __declspec(dllexport)
+#elif defined(__GNUC__)
+	#define EXPORT __attribute__((visibility("default")))
 #else
-#   define EXPORT __declspec(dllimport)
+    #define EXPORT
+    #define IMPORT
+    #pragma warning Unknown dynamic link import/export semantics.
 #endif
 
 struct PersonInfo
